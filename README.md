@@ -1,4 +1,4 @@
-# Omokai Robotics Engineering Task
+# ROS - LLM guided robot patrol
 
 ## Overview
 

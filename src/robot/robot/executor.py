@@ -141,24 +141,38 @@ class RobotExecutor(Node):
 
     
 def main(args=None):
+
     prompt = input("Enter command: ")
+
+    print("\nSending prompt to Gemini...\n")
+
     mission_json = parse_prompt(prompt)
-    
+
+    print("Generated JSON:")
+    print(json.dumps(mission_json, indent=4))
+
     valid, message = validate_mission(mission_json)
-    if not valid: return
+
+    print("\nValidation:", message)
+
+    if not valid:
+        return
 
     rclpy.init(args=args)
+
     robot = RobotExecutor()
+
     time.sleep(1)
 
     try:
-        # Pass both speed AND distance from the parsed LLM JSON
         robot.explore_environment(
             max_speed=mission_json.get("speed", 0.15),
             target_distance=mission_json.get("distance", 2.0)
         )
+
     except KeyboardInterrupt:
         pass
+
     finally:
         robot.stop()
         robot.destroy_node()
